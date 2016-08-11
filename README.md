@@ -1,4 +1,4 @@
-# LZ4X v1.03
+# LZ4X v1.10
 
 ### Description
 LZ4X is an LZ4-compatible file compressor which uses optimized string parsing to provide higher compression ratios.
