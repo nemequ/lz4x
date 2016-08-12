@@ -6,7 +6,7 @@ Written and placed in the public domain by Ilya Muravyov
 
 */
 
-#ifdef __GNUC__
+#ifndef _WIN32
 
 #define _FILE_OFFSET_BITS 64
 #define _fseeki64 fseeko64
@@ -16,7 +16,7 @@ Written and placed in the public domain by Ilya Muravyov
 #define __min(a, b) ((a)<(b)?(a):(b))
 #define __max(a, b) ((a)>(b)?(a):(b))
 
-#endif // __GNUC__
+#endif // _WIN32
 
 #define _CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES 1
 #define _CRT_SECURE_NO_WARNINGS
@@ -27,7 +27,7 @@ Written and placed in the public domain by Ilya Muravyov
 #include <string.h>
 #include <time.h>
 
-#ifndef NO_UTIME
+#ifdef _WIN32
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/utime.h>
@@ -661,7 +661,7 @@ int main(int argc, char** argv)
   fclose(fin);
   fclose(fout);
 
-#ifndef NO_UTIME
+#ifdef _WIN32
   struct _stati64 sb;
   if (_stati64(argv[1], &sb))
   {
