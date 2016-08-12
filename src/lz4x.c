@@ -9,8 +9,8 @@ Written and placed in the public domain by Ilya Muravyov
 #ifndef _WIN32
 
 #define _FILE_OFFSET_BITS 64
-#define _fseeki64 fseeko64
-#define _ftelli64 ftello64
+#define _fseeki64 fseeko
+#define _ftelli64 ftello
 #define _stati64 stat
 
 #define __min(a, b) ((a)<(b)?(a):(b))
@@ -31,6 +31,10 @@ Written and placed in the public domain by Ilya Muravyov
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/utime.h>
+
+typedef int bool;
+#else
+#include <stdbool.h>
 #endif
 
 typedef unsigned char byte;
@@ -218,7 +222,7 @@ void compress(const int max_chain)
     fwrite(&bsize, 1, sizeof(bsize), fout);
     fwrite(&buf[BLOCK_SIZE], 1, bsize, fout);
 
-    fprintf(stderr, "%3d%%\r", static_cast<int>((_ftelli64(fin)*100)/flen));
+    fprintf(stderr, "%3d%%\r", (int)((_ftelli64(fin)*100)/flen));
   }
 }
 
@@ -449,7 +453,7 @@ void compress_optimal()
     fwrite(&bsize, 1, sizeof(bsize), fout);
     fwrite(&buf[BLOCK_SIZE], 1, bsize, fout);
 
-    fprintf(stderr, "%3d%%\r", static_cast<int>((_ftelli64(fin)*100)/flen));
+    fprintf(stderr, "%3d%%\r", (int)((_ftelli64(fin)*100)/flen));
   }
 }
 
@@ -665,7 +669,7 @@ int main(int argc, char** argv)
   }
 
   fprintf(stderr, "%lld -> %lld in %1.2fs\n", _ftelli64(fin), _ftelli64(fout),
-      static_cast<double>(clock()-start)/CLOCKS_PER_SEC);
+      (double)(clock()-start)/CLOCKS_PER_SEC);
 
   fclose(fin);
   fclose(fout);
