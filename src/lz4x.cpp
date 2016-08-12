@@ -54,7 +54,16 @@ byte buf[BLOCK_SIZE+COMPRESS_BOUND];
 #define HASH_SIZE (1<<HASH_LOG)
 #define NIL (-1)
 
+#if defined(__INTEL_COMPILER) && !defined(FORCE_UNALIGNED)
 #define LOAD32(p) (*reinterpret_cast<const uint*>(&buf[p]))
+#else
+static inline uint LOAD32(int p) {
+	uint v;
+	memcpy(&v, &(buf[p]), sizeof(uint));
+	return v;
+}
+#endif
+
 #define HASH32(p) ((LOAD32(p)*0x125A517D)>>(32-HASH_LOG))
 
 #define GET_BYTE() buf[BLOCK_SIZE+(bp++)]
